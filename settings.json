@@ -1,0 +1,16 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "go.lintTool": "golangci-lint",
+  "go.useLanguageServer": true,
+  "[go]": {
+    "editor.insertSpaces": false,
+    "editor.tabSize": 4
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}
