@@ -1,13 +1,13 @@
+import { Button, Checkbox, Input, List, Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { List, Input, Button, Checkbox, Modal } from 'antd';
-import { ModalFuncProps } from 'antd';
-import { getTodos, createTodo, updateTodo, deleteTodo, Todo } from '../services/api';
+import { createTodo, getTodos, Todo, updateTodo } from '../services/api';
 
 
 const TodoList: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [idToDelete, setIdToDelete] = useState<number | null>(null);
 
   useEffect(() => {
     getTodos().then(res => setTodos(res.data));
@@ -23,31 +23,7 @@ const TodoList: React.FC = () => {
       setTodos(todos.map(t => t.id === todo.id ? { ...t, completed: !t.completed } : t));
     });
   };
-
-  const removeTodo = (id: number) => {
-    console.log("Delete button clicked for ID:", id);
-      try {
-        console.log('Attempting to call Modal.confirm');
-        const modal = Modal.confirm({
-          title: 'Delete Todo?',
-          content: 'Are you sure you want to delete this todo?',
-          getContainer: () => document.body,
-          onOk: async () => {
-            console.log('Confirmed deletion for ID:', id);
-            modal.destroy();
-          },
-          onCancel: () => {
-            console.log('Deletion cancelled');
-            modal.destroy();
-          },
-        } as ModalFuncProps);
-        console.log('After Modal.confirm');
-      } catch (error) {
-        console.error('Error rendering Modal.confirm:', error);
-      }
-  };
  
-
   return (
     <div style={{ padding: 20 }}>
       <Input placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} />
@@ -58,13 +34,28 @@ const TodoList: React.FC = () => {
         bordered
         dataSource={todos}
         renderItem={todo => (
-          <List.Item actions={[<Button onClick={() => removeTodo(todo.id)}>Delete</Button>]}>
+          <List.Item actions={[<Button onClick={() => setIdToDelete(todo.id)}>Delete</Button>]}>
             <Checkbox checked={todo.completed} onChange={() => toggleComplete(todo)}>
               {todo.title} - {todo.description}
             </Checkbox>
           </List.Item>
         )}
       />
+      <Modal 
+        open={idToDelete !== null} 
+        title="Delete Todo?" 
+        onOk={() => {
+          console.log('Confirmed deletion for ID:', idToDelete);
+          // do the thing
+          setIdToDelete(null)
+        }} 
+        onCancel={() => {
+          console.log('Deletion cancelled');
+          setIdToDelete(null);
+        }}
+      >
+        Are you sure you want to delete this todo?
+      </Modal>
     </div>
   );
 };
