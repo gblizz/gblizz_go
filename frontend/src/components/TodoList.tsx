@@ -1,4 +1,4 @@
-import { Button, Checkbox, Input, List, Modal } from 'antd';
+import { Button, Checkbox, Input, List, Modal, Popconfirm } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { createTodo, getTodos, Todo, updateTodo } from '../services/api';
 
@@ -7,7 +7,6 @@ const TodoList: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [idToDelete, setIdToDelete] = useState<number | null>(null);
 
   useEffect(() => {
     getTodos().then(res => setTodos(res.data));
@@ -34,28 +33,25 @@ const TodoList: React.FC = () => {
         bordered
         dataSource={todos}
         renderItem={todo => (
-          <List.Item actions={[<Button onClick={() => setIdToDelete(todo.id)}>Delete</Button>]}>
+          <List.Item actions=
+            {[
+              <Popconfirm 
+                title="Are you sure?" 
+                onConfirm={() => {
+                  console.log('Confirmed deletion for ID:', todo.id);
+                  // do the thing
+                }}
+              >
+                <Button>Delete</Button>
+              </Popconfirm>
+            ]}
+          >
             <Checkbox checked={todo.completed} onChange={() => toggleComplete(todo)}>
               {todo.title} - {todo.description}
             </Checkbox>
           </List.Item>
         )}
       />
-      <Modal 
-        open={idToDelete !== null} 
-        title="Delete Todo?" 
-        onOk={() => {
-          console.log('Confirmed deletion for ID:', idToDelete);
-          // do the thing
-          setIdToDelete(null)
-        }} 
-        onCancel={() => {
-          console.log('Deletion cancelled');
-          setIdToDelete(null);
-        }}
-      >
-        Are you sure you want to delete this todo?
-      </Modal>
     </div>
   );
 };
