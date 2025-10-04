@@ -19,6 +19,8 @@ func InitDB() error {
 	dbHost := os.Getenv("DB_HOST")
 	dbPort := "5432" // Default PostgreSQL port
 
+	fmt.Println("DB_USER:", dbUser)
+
 	// Validate environment variables
 	if dbUser == "" || dbPassword == "" || dbName == "" || dbHost == "" {
 		return fmt.Errorf("missing required environment variables: DB_USER=%s, DB_PASSWORD=%s, DB_NAME=%s, DB_HOST=%s",

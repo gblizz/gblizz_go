@@ -12,7 +12,8 @@ import (
 )
 
 func main() {
-	godotenv.Load()
+	godotenv.Load("../.env") // Load from parent directory
+
 	InitDB()
 	r := mux.NewRouter()
 	r.HandleFunc("/todos", GetTodos).Methods("GET")
