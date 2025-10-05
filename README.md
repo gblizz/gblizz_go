@@ -25,8 +25,7 @@ use this bash script to initialize the backend services
 *should see 'Server starting on :8080'
 
 ##FRONTEND
-cd frontend
-
+1. Navigate to frontend directory 'cd frontend'
 2. Install dependencies 'npm install'
 3. Start frontend server: 'npm start'
 
